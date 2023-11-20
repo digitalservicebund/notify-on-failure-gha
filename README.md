@@ -27,13 +27,14 @@ This GHA sends a message to a Slack channel when a [workflow job](https://docs.g
 name: Pipeline
 
 jobs:
+  on: [push]
   test_job:
     runs-on: ubuntu-latest
     steps:
       - name: Faulty step
         run: exit 1
       - name: Send failure to Slack
-        uses: digitalservicebund/notify-on-failure-gha@2d30386af9bbeb448023f598818ef96b6225c24b # v1.0.0
+        uses: digitalservicebund/notify-on-failure-gha@d050613c380ee805de056e6ba37eb6676a98ce4f # v1.1.0
         if: ${{ failure() }}
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
