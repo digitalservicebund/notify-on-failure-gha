@@ -10,6 +10,7 @@ runs:
     - name: Get commit title
       ## Full commit message (title and body) create an invalid JSON payload
       run: echo "commit_title=$(git show -s --format=%s)" >> "$GITHUB_ENV"
+      shell: bash
     - name: Send failure to Slack
       # Third-party action, pin to commit SHA!
       # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -20,7 +21,7 @@ runs:
       with:
         payload: |
           {
-            "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}> run failed for \"<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|${{ github.event.pull_request.title || $commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
+            "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}> run failed for \"<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|${{ github.event.pull_request.title || env.commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
             "attachments": [
               {
                 "color": "#ff0000",
@@ -29,7 +30,7 @@ runs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "*Workflow*: ${{ github.workflow }}\n*Failed job*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}>\n*Commit or PR:* <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|${{ github.event.pull_request.title || $commit_title }}>\n*Branch:* ${{ github.ref }}\n*Author:* ${{ github.triggering_actor }}"
+                      "text": "*Workflow*: ${{ github.workflow }}\n*Failed job*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}>\n*Commit or PR:* <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|${{ github.event.pull_request.title || env.commit_title }}>\n*Branch:* ${{ github.ref }}\n*Author:* ${{ github.triggering_actor }}"
                     }
                   }
                 ]
