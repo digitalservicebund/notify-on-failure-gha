@@ -23,7 +23,7 @@ runs:
       with:
         payload: |
           {
-            "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}> run failed for \"<${{ github.event.pull_request.html_url || github.server_url/github.repository'/commit/'env.commit_sha }}|${{ github.event.pull_request.title || env.commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
+            "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}> run failed for \"<${{ github.event.pull_request.html_url || github.server_url'/'github.repository'/commit/'env.commit_sha }}|${{ github.event.pull_request.title || env.commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
             "attachments": [
               {
                 "color": "#ff0000",
@@ -32,7 +32,7 @@ runs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "*Workflow*: ${{ github.workflow }}\n*Failed job*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}>\n*Commit or PR:* <${{ github.event.pull_request.html_url || github.server_url/github.repository'/commit/'env.commit_sha }}|${{ github.event.pull_request.title || env.commit_title }}>\n*Branch:* ${{ github.ref }}\n*Author:* ${{ github.triggering_actor }}"
+                      "text": "*Workflow*: ${{ github.workflow }}\n*Failed job*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}>\n*Commit or PR:* <${{ github.event.pull_request.html_url || github.server_url'/'github.repository'/commit/'env.commit_sha }}|${{ github.event.pull_request.title || env.commit_title }}>\n*Branch:* ${{ github.ref }}\n*Author:* ${{ github.triggering_actor }}"
                     }
                   }
                 ]
