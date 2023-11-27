@@ -26,8 +26,9 @@ This GHA sends a message to a Slack channel when a [workflow job](https://docs.g
 ```yaml
 name: Pipeline
 
+on: [push]
+
 jobs:
-  on: [push]
   test_job:
     runs-on: ubuntu-latest
     steps:
