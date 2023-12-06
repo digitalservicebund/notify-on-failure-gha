@@ -1,0 +1,19 @@
+name: Tests notify GHA
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  send_message_test_channel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Failing on purpose
+        run: exit 1
+      - name: Send failure to Slack
+        uses: ./
+        if: ${{ failure() }}
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
