@@ -13,12 +13,12 @@ This GHA sends a message to a Slack channel when a [workflow job](https://docs.g
 
 ```yaml
 - name: Send failure to Slack
-  uses: digitalservicebund/github-actions/notify-on-failure@HASH_PLACEHOLDER
+  uses: digitalservicebund/notify-on-failure-gha@HASH_PLACEHOLDER
   if: ${{ failure() }}
   with:
     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
-- Copy the last commit hash from our [internal GitHub actions repo](https://github.com/digitalservicebund/github-actions/commits/main/notify-on-failure).
+- Copy the last commit hash from our [internal GitHub actions repo](https://github.com/digitalservicebund/notify-on-failure-gha/commits/main/).
 - Back to your code, search and replace every occurence of `HASH_PLACEHOLDER` with the commit hash you just copied.
 
 ### Example
