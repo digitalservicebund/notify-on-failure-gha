@@ -36,7 +36,7 @@ jobs:
       - name: Faulty step
         run: exit 1
       - name: Send failure to Slack
-        uses: digitalservicebund/notify-on-failure-gha@latest
+        uses: digitalservicebund/notify-on-failure-gha@eed03687209c3feec10e18e2303574116bf5eb69
         if: ${{ failure() }}
         with:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
