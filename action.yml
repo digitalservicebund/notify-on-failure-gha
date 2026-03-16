@@ -18,7 +18,7 @@ runs:
       shell: bash
     - name: Send failure to Slack
       id: slack
-      uses: slackapi/slack-github-action@v3.0.1
+      uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 #v3.0.1
       with:
         method: chat.postMessage
         token: ${{ inputs.SLACK_BOT_TOKEN }}

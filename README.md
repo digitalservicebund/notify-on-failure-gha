@@ -40,6 +40,7 @@ jobs:
         if: ${{ failure() }}
         with:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: C1290845823
 ```
 
 ## Updating this action
