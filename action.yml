@@ -1,7 +1,7 @@
 name: "Notify on failure"
 description: "Send a message to Slack when a job fails"
 inputs:
-  SLACL_BOT_TOKEN:
+  SLACK_BOT_TOKEN:
     description: "slack bot token passed through from secrets."
     required: true
   SLACK_CHANNEL_ID:
