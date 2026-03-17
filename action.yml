@@ -1,8 +1,11 @@
 name: "Notify on failure"
 description: "Send a message to Slack when a job fails"
 inputs:
-  SLACK_WEBHOOK_URL:
-    description: "url that tells Slack which channel should receive this notification."
+  SLACK_BOT_TOKEN:
+    description: "slack bot token passed through from secrets."
+    required: true
+  SLACK_CHANNEL_ID:
+    description: "slack channel ID to send messages to (find by right clicking on channel -> view channel details -> about)."
     required: true
 runs:
   using: "composite"
@@ -14,15 +17,14 @@ runs:
         echo "commit_sha=$(git show -s --format=%H)" >> "$GITHUB_ENV"
       shell: bash
     - name: Send failure to Slack
-      # Third-party action, pin to commit SHA!
-      # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-      uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0
-      env:
-        SLACK_WEBHOOK_URL: ${{ inputs.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      id: slack
+      uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 #v3.0.1
       with:
+        method: chat.postMessage
+        token: ${{ inputs.SLACK_BOT_TOKEN }}
         payload: |
           {
+            "channel": "${{ inputs.SLACK_CHANNEL_ID }}",
             "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}> run failed for \"<${{ format('{0}/{1}/commit/{2}', github.server_url, github.repository, env.commit_sha) }}|${{ env.commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
             "attachments": [
               {
