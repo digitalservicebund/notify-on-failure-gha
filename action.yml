@@ -7,6 +7,9 @@ inputs:
   SLACK_CHANNEL_ID:
     description: "slack channel ID to send messages to (find by right clicking on channel -> view channel details -> about)."
     required: true
+  GITHUB_JOB_NAME:
+    description: "optionally specify the job name for if this is not running within the job"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -25,7 +28,7 @@ runs:
         payload: |
           {
             "channel": "${{ inputs.SLACK_CHANNEL_ID }}",
-            "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}> run failed for \"<${{ format('{0}/{1}/commit/{2}', github.server_url, github.repository, env.commit_sha) }}|${{ env.commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
+            "text": "<!here> <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ inputs.GITHUB_JOB_NAME || github.job }}> run failed for \"<${{ format('{0}/{1}/commit/{2}', github.server_url, github.repository, env.commit_sha) }}|${{ env.commit_title }}>\" on <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.repository }}> :fire:",
             "attachments": [
               {
                 "color": "#ff0000",
@@ -34,7 +37,7 @@ runs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "*Workflow*: ${{ github.workflow }}\n*Failed job*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.job }}>\n*Commit:* <${{ format('{0}/{1}/commit/{2}', github.server_url, github.repository, env.commit_sha) }}|${{ env.commit_title }}>\n*Branch:* ${{ github.ref }}\n*Author:* ${{ github.triggering_actor }}"
+                      "text": "*Workflow*: ${{ github.workflow }}\n*Failed job*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ inputs.GITHUB_JOB_NAME || github.job }}>\n*Commit:* <${{ format('{0}/{1}/commit/{2}', github.server_url, github.repository, env.commit_sha) }}|${{ env.commit_title }}>\n*Branch:* ${{ github.ref }}\n*Author:* ${{ github.triggering_actor }}"
                     }
                   }
                 ]
