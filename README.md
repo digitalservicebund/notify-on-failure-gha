@@ -11,6 +11,7 @@ This GHA sends a message to a Slack channel when a [workflow job](https://docs.g
 - Ask the platform team to add the `SLACK_BOT_TOKEN` secret to your repo.
 - Find and copy the slack channel ID: right clicking on channel -> view channel details -> about.
 - Add this code as final step of every job you wish to received failure notification from:
+- Make sure the job has checked out the git repository
 ```yaml
 - name: Send failure to Slack
   uses: digitalservicebund/notify-on-failure-gha@HASH_PLACEHOLDER
@@ -33,6 +34,7 @@ jobs:
   test_job:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # <- adapt version
       - name: Faulty step
         run: exit 1
       - name: Send failure to Slack
