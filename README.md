@@ -4,24 +4,32 @@
 
 This GHA sends a message to a Slack channel when a [workflow job](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#jobs) fails.
 
-**Note:** if you want to receive a message for every run status (successul, failed, cancelled), use the [GitHub + Slack Integration](https://github.com/integrations/slack#actions-workflow-notifications) instead of this GHA.
+**Note:** if you want to receive a message for every run status (successful, failed, cancelled), use the [GitHub + Slack Integration](https://github.com/integrations/slack#actions-workflow-notifications) instead of this GHA.
 
 ## How to use
 
-- Ask the platform team to add the `SLACK_BOT_TOKEN` secret to your repo.
-- Find and copy the slack channel ID: right clicking on channel -> view channel details -> about.
-- Add this code as final step of every job you wish to received failure notification from:
-- Make sure the job has checked out the git repository
+- Make sure your repository has access to the `SLACK_BOT_TOKEN` secret. DigitalService engineers can find instructions on how to request access in our internal documentation.
+- Find and copy the Slack channel ID: right-click on the channel -> View channel details -> About.
+- Make sure the job has checked out the git repository (e.g. with `actions/checkout`), as the action reads the latest commit.
+- Add this code as the final step of every job you wish to receive failure notifications from:
 ```yaml
 - name: Send failure to Slack
-  uses: digitalservicebund/notify-on-failure-gha@HASH_PLACEHOLDER
+  uses: digitalservicebund/notify-on-failure-gha@HASH_PLACEHOLDER #vX.Y.Z
   if: ${{ failure() }}
   with:
     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     SLACK_CHANNEL_ID: <slack channel ID>
 ```
-- Copy the last commit hash from our [internal GitHub actions repo](https://github.com/digitalservicebund/notify-on-failure-gha/commits/main/).
-- Back to your code, search and replace every occurence of `HASH_PLACEHOLDER` with the commit hash you just copied.
+- Open the [latest release](https://github.com/digitalservicebund/notify-on-failure-gha/releases/latest) and copy the full commit hash of its tag.
+- Back in your code, replace every occurrence of `HASH_PLACEHOLDER` with the commit hash you just copied, and `vX.Y.Z` with the release version.
+
+### Inputs
+
+| Name               | Required | Description                                                                 |
+| ------------------ | -------- | --------------------------------------------------------------------------- |
+| `SLACK_BOT_TOKEN`  | yes      | Slack bot token, passed through from secrets.                               |
+| `SLACK_CHANNEL_ID` | yes      | ID of the Slack channel to send messages to.                                |
+| `GITHUB_JOB_NAME`  | no       | Job name to show in the message, if the action is not running within the job itself. Defaults to the current job. |
 
 ### Example
 
@@ -34,17 +42,13 @@ jobs:
   test_job:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # <- adapt version
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Faulty step
         run: exit 1
       - name: Send failure to Slack
-        uses: digitalservicebund/notify-on-failure-gha@eed03687209c3feec10e18e2303574116bf5eb69
+        uses: digitalservicebund/notify-on-failure-gha@b8fdda76a38fa8e94cf623ebdd03e4570bc4ceb0 # v1.9.0
         if: ${{ failure() }}
         with:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: C1290845823
 ```
-
-## Updating this action
-
-After merging a dependabot PR or pushing changes, you need to [cut a new release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
